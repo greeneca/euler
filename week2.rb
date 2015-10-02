@@ -21,7 +21,7 @@ time = Benchmark.realtime do
 
   sum += startA if startA.even?
   sum += startB if startB.even?
-  fibsum(startA, startB, sum, 4000000)
+  sum = fibsum(startA, startB, sum, 4000000)
 
 end
 
