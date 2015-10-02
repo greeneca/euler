@@ -1,21 +1,29 @@
 #! /usr/bin/env ruby
 
+require "benchmark"
+
+sum = 0
 startA = 1
 startB = 2
 
-def fibsum (a, b, sum, max)
-  nxt = a + b
-  if nxt < max
-    if nxt.even?
-      sum += nxt
+time = Benchmark.realtime do
+
+  def fibsum (a, b, sum, max)
+    nxt = a + b
+    if nxt < max
+      if nxt.even?
+        sum += nxt
+      end
+      sum = fibsum(b, nxt, sum, max)
     end
-    sum = fibsum(b, nxt, sum, max)
+    return sum
   end
-  return sum
+
+  sum += startA if startA.even?
+  sum += startB if startB.even?
+  fibsum(startA, startB, sum, 4000000)
+
 end
 
-sum = 0
-sum += startA if startA.even?
-sum += startB if startB.even?
+puts "Result: #{sum} in #{time*1000}ms"
 
-puts fibsum(startA, startB, sum, 4000000)
