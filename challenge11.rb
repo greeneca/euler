@@ -26,26 +26,36 @@ grid = [
 ]
 
 def rowMaxProduct(row)
+  product = row[0]*row[1]*row[2]*row[3]
+  max = product
   x = 0
-  max = 0
-  for i in 0..row.count-4
-    product = row[i]*row[i+1]*row[i+2]*row[i+3]
+  for i in 4..row.count-1
+    if row[i-4] != 0
+      product = product*row[i]/row[i-4]
+    else
+      product = row[i]*row[i-1]*row[i-4]*row[i-3]
+    end
     if product > max
       max = product
-      x = i
+      x = i-3
     end
   end
   return [x, max]
 end
 
 def colMaxProduct(grid, x)
+  product = grid[0][x]*grid[1][x]*grid[2][x]*grid[3][x]
+  max = product
   y = 0
-  max = 0
-  for i in 0..grid.count-4
-    product = grid[i][x]*grid[i+1][x]*grid[i+2][x]*grid[i+3][x]
+  for i in 4..grid.count-1
+    if grid[i-4][x] != 0
+      product = product*grid[i][x]/grid[i-4][x]
+    else
+      product = grid[i][x]*grid[i-1][x]*grid[i-2][x]*grid[i-3][x]
+    end
     if product > max
       max = product
-      y = i
+      y = i-3
     end
   end
   return [y, max]
@@ -53,6 +63,7 @@ end
 
 coordinates = [0, 0]
 max = 0
+direction = "none"
 
 time = Benchmark.realtime do
   for y in 0..grid[0].count-1
@@ -60,6 +71,7 @@ time = Benchmark.realtime do
     if product > max
       max = product
       coordinates = [x, y]
+      direction = "right"
     end
   end
   for x in 0..grid.count-1
@@ -67,10 +79,11 @@ time = Benchmark.realtime do
     if product > max
       max = product
       coordinates = [x, y]
+      direction = "down"
     end
   end
 end
-puts "Result: #{max} at [#{coordinates[0]}, #{coordinates[1]}] in #{time*1000}ms"
+puts "Result: #{max} at [#{coordinates[0]}, #{coordinates[1]}] going #{direction} in #{time*1000}ms"
 
 
 
